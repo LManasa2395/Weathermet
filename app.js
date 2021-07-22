@@ -36,8 +36,8 @@ app.get("/", async (req, res) => {
 });
 
 app.post('/getdata', async(req,res) => {
-  const { cityName } = req.body;
-  const tempvar = await getTemp(cityName);
+  const { query } = req.body;
+  const tempvar = await getTemp(query);
   res.render("./home.ejs", { temprature: tempvar });
 })
 
