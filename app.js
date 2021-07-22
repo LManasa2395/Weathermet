@@ -23,9 +23,23 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(flash());
 app.use(helmet({ contentSecurityPolicy: false }));
 
-app.get("/", (req, res) => {
-  res.render("./home.ejs", { temprature: tempvar });
+const getTemp = async (cityName) => {
+  const getValue = await axios.get(
+    `http://api.openweathermap.org/data/2.5/weather?q=${cityName}&mode=json&units=metric&appid=cb02915bb92f05b586b8c59d3d49b906`
+  );
+  return getValue.data.main.temp;
+}
+
+app.get("/", async (req, res) => {
+  const tempvar = await getTemp('paris');
+  res.render("./home.ejs", {  temprature: tempvar });
 });
+
+app.post('/getdata', async(req,res) => {
+  const { cityName } = req.body;
+  const tempvar = await getTemp(cityName);
+  res.render("./home.ejs", { temprature: tempvar });
+})
 
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page Not Found", 404));
