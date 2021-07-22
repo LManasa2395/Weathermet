@@ -24,7 +24,7 @@ app.use(flash());
 app.use(helmet({ contentSecurityPolicy: false }));
 
 app.get("/", (req, res) => {
-  res.render("./home.ejs");
+  res.render("./home.ejs", { temprature: tempvar });
 });
 
 app.all("*", (req, res, next) => {
